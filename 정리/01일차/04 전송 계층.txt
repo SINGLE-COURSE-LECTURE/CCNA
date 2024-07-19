@@ -1,0 +1,14 @@
+1 OSI 모델중 4계층 모델이 하는 역할에 대해서 서술하세요 
+종단간 데이터의 신뢰성을 보장
+3Hand-Shaking
+4Hand-Shaking
+Flow-Control
+Segmentation
+Sliding Window..
+etc..
+
+
+2 4 계층 관련 프로토콜은 어떤게 있고 각각 특징을 서술하세요
+
+TCP	: 민감데이터 전송 / 전송속도 ↓	/ 신뢰성 ↑
+UDP	: 일반데이터 전송 / 전송속도 ↑	/ 신뢰성 ↓
