@@ -1,0 +1,50 @@
+
+-----------------------------
+[Voice Vlan 설정] - 1
+-----------------------------
+vlan 10 
+
+int range fa0/2-3
+switchport mode access
+switchport voice vlan 10
+
+int fa0/1
+switchport mode trunk
+
+
+-----------------------------
+IPPhnoe DHCP 할당] - 2
+-----------------------------
+DHCP(config)# ip dhcp pool voice10
+DHCP(dhcp-config)# network 192.168.10.0 255.255.255.0 
+DHCP(dhcp-config)# default-router 192.168.10.254 
+DHCP(dhcp-config)# option 150 ip 192.168.10.254 
+
+-----------------------------
+[ IP Phone CME 설정 ] : CME(Cisco CallManager Express) - 3
+-----------------------------
+DHCP(config)#telephony-service
+DHCP(config-telephony)# max-ephones 2 
+DHCP(config-telephony)# max-dn 2 
+DHCP(config-telephony)#ip source-address 192.168.10.254 port 2000
+ 
+-----------------------------
+[IPPhone 번호 지정] : DN(Directory Number) - 4
+-----------------------------
+DN(Directory Number)  
+[1번째 IP폰]
+DHCP(config)# ephone-dn 1 
+DHCP(config-ephone-dn)# number 1001 
+DHCP(config)# ephone 1 
+DHCP(config- 
+DHCP(config- ephone)# mac-address 0001.c7e1.6480
+DHCP(config- ephone)# type 7960 
+DHCP(config- ephone)# button 1:1 (button 1 : dn 1) 
+[2번째 IP폰]
+DHCP(config)# ephone-dn 2
+DHCP(config-ephone-dn)# number 1002 
+DHCP(config)# ephone 2 
+
+
+
+
