@@ -1,0 +1,80 @@
+-----------------------------------
+참고
+-----------------------------------
+https://www.cisco.com/c/ko_kr/support/docs/quality-of-service-qos/qos-packet-marking/10100-priorityvsbw.html#configuringtheprioritycommand
+
+-----------------------------------
+[Bandwidth QoS]
+-----------------------------------
+// student->web 허용
+access-list 100 permit ip 172.16.0.0 0.0.255.255 192.168.20.0 0.0.0.255
+
+
+// teacher->web 허용
+access-list 101 permit ip 192.168.10.0 0.0.0.255 192.168.20.0 0.0.0.255
+
+
+// ACL 기반 패킷에 대한 class-map 생성
+// class-map : 조건부 설정 
+class-map match-any student
+match access-group 100
+
+class-map match-any teacher
+match access-group 101       
+
+
+// student와 teacher에 각각 bandwidth 할당
+// policy-map : Action
+
+policy-map distribute_speed
+class student
+bandwidth percent 70
+exit
+class teacher
+bandwidth percent 30
+
+
+// 외부인터페이스에 policy-map 적용
+int s0/0/0
+service-policy output distribute_speed
+
+
+//QoS 확인
+
+Show policy-map interace s 0/0
+
+
+
+-----------------------------------
+패킷 우선순위 조정 - 혼잡시 속도 유지 
+-----------------------------------
+enable
+config ter
+policy-map distribute_speed
+class student
+no bandwidth 
+priority percent 60
+
+
+//QoS 확인
+
+Show policy-map interace s 0/0
+
+
+-----------------------------------
+Queue Size 조정 
+-----------------------------------
+enable
+config ter
+policy-map distribute_speed
+class student
+queue-limit 300
+exit
+class teacher
+queue-limit 100
+
+
+//QoS 확인
+
+Show policy-map interace s 0/0
+

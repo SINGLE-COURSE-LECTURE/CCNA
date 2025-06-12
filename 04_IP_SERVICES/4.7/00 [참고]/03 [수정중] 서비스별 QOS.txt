@@ -1,0 +1,52 @@
+enable
+config ter
+//Mail 서비스 
+class-map match-any EMAIL
+match protocol smtp
+match protocol pop3
+exit
+
+// Web 서비스 
+class-map match-any WEB
+match protocol http
+exit
+
+
+// VOIP 서비스 
+class-map VOICE
+match protocol rtp
+exit
+
+// 확인
+do show class-map 
+
+
+// 정책 설정 
+policy-map ServiceQoS
+class EMAIL
+set ip dscp af11	// 우선순위 precedence 3 설정 
+bandwidth 10000		// 밴드위드 10000kbit 
+exit
+
+class WEB
+bandwidth 10000
+random-detect dscp-based //혼잡시 dscp 기준으로 우선순위 낮은 패킷 버림 
+exit
+
+policy-map CCNA-DEMO
+class DOWNLOADS
+police 10000000 
+exit
+exit
+class VOICE
+priority 1000
+
+int gig 0/0
+service-policy output CCNA-DEMO
+end
+
+
+
+show policy-map
+
+show policy-map interface gig 0/0
